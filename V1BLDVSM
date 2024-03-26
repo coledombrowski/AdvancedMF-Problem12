@@ -1,0 +1,36 @@
+//V1BLDVSM  JOB 1,NOTIFY=&SYSUID
+//ALLOCATE  EXEC PGM=IDCAMS
+//SYSPRINT  DD SYSOUT=*
+//SYSIN     DD *
+  DEFINE CLUSTER (                               -
+               NAME(UNTG020.VSAM.V1MASTVS)       -
+               VOLUMES(VPWRKA)                   -
+               RECORDSIZE(80 80)                 -
+               RECORDS(50 10)                    -
+               KEYS(5 0)                         -
+               INDEXED )                         -
+         DATA (                                  -
+             NAME(UNTG020.VSAM.V1MASTVS.DATA) )  -
+         INDEX (                                 -
+             NAME(UNTG020.VSAM.V1MASTVS.INDEX) )
+//   IF RC = 0 THEN
+//COPY      EXEC PGM=IDCAMS
+//SYSPRINT  DD SYSOUT=*
+//IN        DD DISP=SHR,DSN=UNTG020.DATAIN(V1MASTSQ)
+//OUT       DD DISP=SHR,DSN=UNTG020.VSAM.V1MASTVS
+//SYSIN     DD *
+  REPRO INFILE(IN) OUTFILE(OUT)
+//   ENDIF
+//   IF RC = 0 THEN
+//PRINTC     EXEC PGM=IDCAMS
+//SYSPRINT   DD SYSOUT=*
+//MASTCHAR   DD DISP=SHR,DSN=UNTG020.VSAM.V1MASTVS
+//SYSIN      DD *
+  PRINT INFILE(MASTCHAR) CHAR
+//PRINTH     EXEC PGM=IDCAMS
+//SYSPRINT   DD SYSOUT=*
+//MASTHEX   DD DISP=SHR,DSN=UNTG020.VSAM.V1MASTVS
+//SYSIN      DD *
+  PRINT INFILE(MASTHEX) HEX
+//   ENDIF
+//
